@@ -1,5 +1,8 @@
 # Cat Behavior AI (YOLOv8 + Tkinter + MySQL)
 
+> [!NOTE]
+> Đây là **bài tập / đồ án cá nhân** phục vụ mục đích học tập và thực hành. Do tập dữ liệu huấn luyện còn nhỏ và mô hình sử dụng phiên bản nhẹ (`YOLOv8n`), **độ chính xác nhận diện hiện tại còn khá thấp** và có thể nhận diện nhầm trong các điều kiện ánh sáng, góc quay hoặc bối cảnh khác nhau.
+
 Ứng dụng nhận diện và theo dõi hành vi mèo (`cat_eating`, `cat_sitting`, `cat_sleeping`, `cat_standing`) theo thời gian thực qua Camera hoặc Video bằng YOLOv8, lưu lịch sử vào MySQL.
 
 ## Yêu cầu hệ thống
