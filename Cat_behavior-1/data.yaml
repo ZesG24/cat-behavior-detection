@@ -1,0 +1,15 @@
+names:
+- cat_eating
+- cat_sitting
+- cat_sleeping
+- cat_standing
+nc: 4
+roboflow:
+  license: CC BY 4.0
+  project: cat_behavior-bujsd
+  url: https://universe.roboflow.com/vinhvdp24-gmail-com/cat_behavior-bujsd/dataset/1
+  version: 1
+  workspace: vinhvdp24-gmail-com
+test: ../test/images
+train: ../train/images
+val: ../valid/images

@@ -1,0 +1,59 @@
+CREATE DATABASE IF NOT EXISTS CatBehaviorAI;
+USE CatBehaviorAI;
+
+-- 1. Bảng lưu thông tin video đã import
+CREATE TABLE IF NOT EXISTS Videos (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    video_hash VARCHAR(255) UNIQUE, -- Tránh import và xử lý trùng lặp
+    upload_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    duration FLOAT                   -- Tổng thời gian video (giây)
+);
+
+-- 2. Danh mục các loại hành vi (Mapping với kết quả từ YOLO)
+CREATE TABLE IF NOT EXISTS Behaviors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    behavior_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 3. Nhật ký chi tiết các sự kiện hành vi trong video
+CREATE TABLE IF NOT EXISTS BehaviorEvents (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    video_id INT NOT NULL,
+    behavior_id INT NOT NULL,
+    start_time FLOAT NOT NULL, -- Thời điểm bắt đầu (giây)
+    end_time FLOAT NOT NULL,   -- Thời điểm kết thúc (giây)
+    confidence FLOAT,          -- Độ tin cậy trung bình của AI (%)
+    
+    CONSTRAINT FK_Video FOREIGN KEY (video_id) REFERENCES Videos(id) ON DELETE CASCADE,
+    CONSTRAINT FK_Behavior FOREIGN KEY (behavior_id) REFERENCES Behaviors(id)
+);
+
+-- Khởi tạo dữ liệu mẫu cho 4 hành vi theo model hiện tại
+INSERT IGNORE INTO Behaviors (behavior_name) VALUES 
+('cat_eating'), ('cat_sitting'), ('cat_sleeping'), ('cat_standing');
+
+-- 4. Bảng quản lý các phiên bật/tắt camera trực tiếp
+CREATE TABLE IF NOT EXISTS CameraSessions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    session_name VARCHAR(255) NOT NULL, -- Ví dụ: "Camera_Live_20260529_233723"
+    start_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    end_time DATETIME NULL,              -- Cập nhật khi nhấn "DỪNG CAMERA"
+    status VARCHAR(50) DEFAULT 'running'
+);
+
+-- 5. Bảng ghi nhận chi tiết hành vi từ Camera trực tiếp
+CREATE TABLE IF NOT EXISTS CameraEvents (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    session_id INT NOT NULL,
+    behavior_id INT NOT NULL,
+    start_time DATETIME NOT NULL,       -- Thời điểm thực tế bắt đầu hành vi
+    end_time DATETIME NOT NULL,         -- Thời điểm thực tế kết thúc hành vi
+    duration FLOAT NOT NULL,            -- Thời gian duy trì hành vi (tính bằng giây)
+    confidence FLOAT,                   -- Độ tin cậy trung bình của AI (%)
+    
+    CONSTRAINT FK_CameraSession FOREIGN KEY (session_id) REFERENCES CameraSessions(id) ON DELETE CASCADE,
+    CONSTRAINT FK_CameraBehavior FOREIGN KEY (behavior_id) REFERENCES Behaviors(id)
+);
+

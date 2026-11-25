@@ -1,0 +1,24 @@
+# Python cache & test artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment & secrets
+.env
+.env.*
+GEMINI.md
+huong_dan_kiem_thu.txt
+
+# Pretrained base weights (tự động tải khi chạy)
+yolov8n.pt
+
+# Training/evaluation artifacts không cần thiết (giữ lại best.pt nếu muốn chạy ngay)
+runs/detect/test_evaluation/
+runs/detect/*/weights/last.pt
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
